@@ -1,9 +1,11 @@
 import { currentUser } from "@clerk/nextjs";
 import { Suspense } from "react";
+import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Brand } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 export default async function Home() {
   return (
@@ -30,13 +32,24 @@ async function WelcomeMsg() {
         <h2>Join the waiting list</h2>
         <p>Sign up here to be the first to hear about our upcoming launch.</p>
         <div className="flex mt-10">
-          <div className="rounded-md bg-gradient-to-r from-pink-500 to-yellow-500 p-[2px]">
+          <div
+            className={cn(
+              "p-[2px] rounded-md bg-gradient-to-r",
+              Brand.gradient,
+            )}
+          >
             <Link href="/sign-up">
               <Button
                 variant="outline"
                 className="dark:text-white dark:bg-neutral-950 bg-white"
               >
-                <span className="bg-gradient-to-r from-red-500 to-orange-500 hover:to-orange-800 bg-clip-text text-transparent">
+                <span
+                  className={cn(
+                    "bg-clip-text text-transparent bg-gradient-to-r ",
+                    Brand.gradient,
+                    `hover:to-${Brand.secondary}`,
+                  )}
+                >
                   Join the waitlist
                 </span>
               </Button>

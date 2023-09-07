@@ -10,3 +10,10 @@ export enum CollectionColors {
 }
 
 export type CollectionColor = keyof typeof CollectionColors;
+
+export enum Brand {
+  gradient = "from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%",
+  primary = "indigo-500",
+  middle = "sky-500",
+  secondary = "to-emerald-500",
+}
