@@ -20,11 +20,12 @@ async function WelcomeMsg() {
   }
 
   return (
-    <div className="flex w-full mb-12">
+    <div className="flex flex-col w-full m-12">
       <h1 className="text-4xl font-bold">
         Welcome, <br />
         {user.firstName} {user.lastName}
       </h1>
+      <br />
       <p>
         Thanks for signing up for our waitlist! We're hard at work building the
         best experience for you, but don't worry, we'll _remind_ you when we're
