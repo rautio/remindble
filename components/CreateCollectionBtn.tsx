@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import { cn } from "@/lib/utils";
+import { Brand } from "@/lib/constants";
 import { Button } from "./ui/button";
 import { CreateCollectionSidebar } from "./CreateCollectionSidebar";
 
@@ -7,13 +9,24 @@ export function CreateCollectionBtn() {
   const [open, setOpen] = useState(false);
   const handleOpenChange = (open: boolean) => setOpen(open);
   return (
-    <div className="w-full rounded-md bg-gradient-to-r from-pink-500 to-yellow-500 p-[2px]">
+    <div
+      className={cn(
+        "w-full rounded-md p-[2px] bg-gradient-to-r",
+        Brand.gradient,
+      )}
+    >
       <Button
         variant="outline"
         className="dark:text-white w-full dark:bg-neutral-950 bg-white"
         onClick={(e) => setOpen(true)}
       >
-        <span className="bg-gradient-to-r from-red-500 to-orange-500 hover:to-orange-800 bg-clip-text text-transparent">
+        <span
+          className={cn(
+            "bg-clip-text text-transparent bg-gradient-to-r",
+            Brand.gradient,
+            `hover:to-${Brand.secondary}`,
+          )}
+        >
           Create collection
         </span>
       </Button>

@@ -6,6 +6,7 @@ import { CreateCollectionBtn } from "@/components/CreateCollectionBtn";
 import prisma from "@/lib/prisma";
 import { SadFace } from "@/components/icons/SadFace";
 import { CollectionCard } from "@/components/CollectionCard";
+import ReminderInput from "@/components/ReminderInput";
 
 export default async function Home() {
   return (
@@ -14,6 +15,7 @@ export default async function Home() {
         <WelcomeMsg />
       </Suspense>
       <Suspense fallback={<div>Loading collections...</div>}>
+        <ReminderInput />
         <CollectionList />
       </Suspense>
     </>
