@@ -9,17 +9,12 @@ export async function createTask(data: createTaskSchemaType) {
   if (!user) {
     throw new Error("User not found.");
   }
-  const { content, expiresAt, collectionId } = data;
+  const { content, expiresAt } = data;
   return await prisma.task.create({
     data: {
       userId: user.id,
       content,
       expiresAt,
-      Collection: {
-        connect: {
-          id: collectionId,
-        },
-      },
     },
   });
 }
