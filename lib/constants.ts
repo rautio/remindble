@@ -16,4 +16,5 @@ export enum Brand {
   primary = "indigo-500",
   middle = "sky-500",
   secondary = "emerald-500",
+  secondaryDark = "emerald-600",
 }
