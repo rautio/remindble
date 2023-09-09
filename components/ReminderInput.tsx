@@ -5,7 +5,14 @@ import { cn } from "@/lib/utils";
 import { Brand } from "@/lib/constants";
 import { Button } from "./ui/button";
 import { toast } from "./ui/use-toast";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
+import {
+  Form,
+  FormControl,
+  FormMessage,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "./ui/form";
 import { createTaskSchema, createTaskSchemaType } from "@/schema/createTask";
 import { createTask } from "@/actions/task";
 import { useRouter } from "next/navigation";
@@ -31,15 +38,14 @@ export function ReminderInput() {
   const router = useRouter();
   const form = useForm<createTaskSchemaType>({
     resolver: zodResolver(createTaskSchema),
-    defaultValues: {},
+    defaultValues: { content: "" },
   });
+  const { formState, reset } = form;
   const onSubmit = async (data: createTaskSchemaType) => {
-    console.log("submitted! ", data);
     const newData = { ...data, expiresAt: undefined };
     try {
       await createTask(newData);
-      form.reset();
-      // router.refresh();
+      router.refresh();
       toast({
         title: "Success",
         description: "Reminder added succesfully.",
@@ -52,6 +58,11 @@ export function ReminderInput() {
       });
     }
   };
+  React.useEffect(() => {
+    if (formState.isSubmitSuccessful) {
+      reset();
+    }
+  }, [formState, reset]);
   return (
     <Form {...form}>
       <form>
@@ -71,32 +82,36 @@ export function ReminderInput() {
                     Remind me to...
                   </span>
                 </FormLabel>
-                <div
-                  className={cn(
-                    "ml-12 p-1 rounded-md bg-gradient-to-r",
-                    Brand.gradient,
-                    `hover:to-${Brand.secondary}`,
-                  )}
-                >
-                  <FormControl>
-                    <Input
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          form.handleSubmit(onSubmit)();
-                        }
-                      }}
-                      placeholder={getPlaceholder()}
-                      className={cn("text-xl p-8 dark:bg-black bg-white")}
-                      {...field}
-                    />
-                  </FormControl>
+                <div className="ml-12">
+                  <div
+                    className={cn(
+                      "p-1 rounded-md bg-gradient-to-r",
+                      Brand.gradient,
+                      `hover:to-${Brand.secondary}`,
+                    )}
+                  >
+                    <FormControl>
+                      <Input
+                        suppressHydrationWarning
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            form.handleSubmit(onSubmit)();
+                          }
+                        }}
+                        placeholder={getPlaceholder()}
+                        className={cn("text-xl p-8 dark:bg-black bg-white")}
+                        {...field}
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
                 </div>
               </FormItem>
               <div className="float-right mt-4">
                 {field.value && (
                   <div className="flex flex-col">
                     <Button
-                      disabled={form.formState.isSubmitting}
+                      disabled={formState.isSubmitting}
                       className={cn(
                         "text-lg mb-2 p-6",
                         `bg-emerald-500 hover:bg-emerald-700`,
@@ -105,7 +120,7 @@ export function ReminderInput() {
                       onClick={form.handleSubmit(onSubmit)}
                     >
                       + Add Reminder
-                      {form.formState.isSubmitting && (
+                      {formState.isSubmitting && (
                         <ReloadIcon className="ml-2 h-4 w-4 animate-spin" />
                       )}
                     </Button>
