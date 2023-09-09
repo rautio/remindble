@@ -1,12 +1,9 @@
 import { currentUser } from "@clerk/nextjs";
 import { Suspense } from "react";
-import { AlertTitle, Alert, AlertDescription } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CreateCollectionBtn } from "@/components/CreateCollectionBtn";
-import prisma from "@/lib/prisma";
-import { SadFace } from "@/components/icons/SadFace";
-import { CollectionCard } from "@/components/CollectionCard";
 import ReminderInput from "@/components/ReminderInput";
+import TaskCard from "@/components/TaskCard";
+import prisma from "@/lib/prisma";
 
 export default async function Home() {
   return (
@@ -14,9 +11,9 @@ export default async function Home() {
       <Suspense fallback={<WelcomeMsgFallback />}>
         <WelcomeMsg />
       </Suspense>
-      <Suspense fallback={<div>Loading collections...</div>}>
-        <ReminderInput />
-        <CollectionList />
+      <ReminderInput />
+      <Suspense fallback={<div>Loading tasks...</div>}>
+        <TaskList />
       </Suspense>
     </>
   );
@@ -50,39 +47,19 @@ function WelcomeMsgFallback() {
   );
 }
 
-async function CollectionList() {
+export async function TaskList() {
   const user = await currentUser();
-  const collections = await prisma.collection.findMany({
-    include: {
-      tasks: true,
-    },
+  const tasks = await prisma.task.findMany({
     where: {
       userId: user?.id,
     },
   });
-  if (collections.length === 0) {
-    return (
-      <div className="flex flex-col gap-5">
-        <Alert>
-          <SadFace />
-          <AlertTitle>There are no collections yet!</AlertTitle>
-          <AlertDescription>
-            Create a collection to get started.
-          </AlertDescription>
-        </Alert>
-        <CreateCollectionBtn />
-      </div>
-    );
-  }
   return (
-    <div>
-      <CreateCollectionBtn />
-      <div className="flex flex-col gap-4 mt-6">
-        {/* @ts-ignore */}
-        {collections.map((collection) => (
-          <CollectionCard key={collection.id} collection={collection} />
-        ))}
-      </div>
+    <div className="">
+      <h1>Reminders</h1>
+      {tasks.map((task) => (
+        <TaskCard task={task} />
+      ))}
     </div>
   );
 }
