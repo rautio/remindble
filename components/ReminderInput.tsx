@@ -107,7 +107,7 @@ export function ReminderInput() {
                   <FormMessage />
                 </div>
               </FormItem>
-              <div className="float-right mt-4">
+              <div className="float-right mt-4 h-24">
                 {field.value && (
                   <div className="flex flex-col">
                     <Button

@@ -1,11 +1,24 @@
 "use client";
-import React, { useTransition } from "react";
+import React, { useTransition, useState } from "react";
 import type { Task } from "@prisma/client";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "./ui/checkbox";
-import { setTaskToDone } from "@/actions/task";
+import { deleteTask, setTaskToDone } from "@/actions/task";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import { TrashIcon } from "@radix-ui/react-icons";
 
 function getExpirationColor(expiresAt: Date) {
   const days = Math.floor((expiresAt.getTime() - Date.now()) / 1000 / 60 / 60);
@@ -18,10 +31,11 @@ function getExpirationColor(expiresAt: Date) {
 
 export function TaskCard({ task }: { task: Task }) {
   const [isLoading, startTransition] = useTransition();
+  const [editing, setEditing] = useState(false);
   const router = useRouter();
   return (
-    <div className="flex gap-2 items-start">
-      <Checkbox
+    <div className="flex gap-2 items-start p-2 pl-3 dark:hover:bg-indigo-800 rounded-md group">
+      {/* <Checkbox
         id={task.id.toString()}
         className="w-5 h-5"
         checked={task.done}
@@ -32,26 +46,39 @@ export function TaskCard({ task }: { task: Task }) {
             router.refresh();
           });
         }}
-      />
-      <label
-        htmlFor={task.id.toString()}
+      /> */}
+      <div
         className={cn(
-          "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 decoration-1 dark:decoration-white",
-          task.done && "line-through"
+          "text-sm flex-grow font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 decoration-1 dark:decoration-white leading-9",
         )}
       >
-        {task.content}
+        {editing ? <Input value={task.content} /> : task.content}
         {task.expiresAt && (
           <p
             className={cn(
-              "text-xs text-neutral-500 dark:text-neutral-400",
-              getExpirationColor(task.expiresAt)
+              "text-xs text-neutral-500 dark:text-neutral-400 ",
+              getExpirationColor(task.expiresAt),
             )}
           >
             {format(task.expiresAt, "MM/dd/yyyy")}
           </p>
         )}
-      </label>
+      </div>
+      <Button
+        className="hidden group-hover:block"
+        variant="ghost"
+        onClick={() => setEditing(true)}
+      >
+        Edit
+      </Button>
+      <Button className="hidden group-hover:block" variant="ghost">
+        <TrashIcon
+          onClick={() => {
+            deleteTask(task.id);
+            router.refresh();
+          }}
+        />
+      </Button>
     </div>
   );
 }

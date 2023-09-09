@@ -56,10 +56,14 @@ export async function TaskList() {
   });
   return (
     <div className="">
-      <h1>Reminders</h1>
-      {tasks.map((task) => (
-        <TaskCard task={task} />
-      ))}
+      <h1 className="text-2xl font-bold text-indigo-500 mb-4">
+        Upcoming Reminders
+      </h1>
+      <div className="ml-12 border p-4 border-indigo-500 rounded-md">
+        {tasks.map((task) => (
+          <TaskCard task={task} />
+        ))}
+      </div>
     </div>
   );
 }
