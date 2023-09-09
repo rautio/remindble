@@ -11,11 +11,23 @@ datasource db {
   directUrl = env("DATABASE_URL_NON_POOLING") // uses a direct connection
 }
 
+// Reminder message
 model Task {
-  id Int @id @default(autoincrement())
-  content String
-  userId String
-  done Boolean @default(false)
-  expiresAt DateTime?
-  createdAt DateTime @default(now())
+  id            Int @id @default(autoincrement())
+  content       String
+  userId        String @unique // Clerk id
+  done          Boolean @default(false)
+  expiresAt     DateTime?
+  createdAt     DateTime @default(now())
+}
+
+// User info & settings
+model User {
+  id            String @id @default(uuid())
+  userId        String @unique // Clerk id
+  email         String? @unique
+  firstName     String?
+  lastName      String?
+  timezone      String? // Important since all reminders in DB are stored in UTC
+  phoneNumber   String?
 }
