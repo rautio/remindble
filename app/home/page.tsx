@@ -5,18 +5,16 @@ import ReminderInput from "@/components/ReminderInput";
 import TaskCard from "@/components/TaskCard";
 import prisma from "@/lib/prisma";
 import { Task } from "@prisma/client";
-import { Brand } from "@/lib/constants";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-
+import SignUp from "@/components/SignUp";
 export default async function Home() {
+  const user = await currentUser();
   return (
     <>
       <Suspense fallback={<WelcomeMsgFallback />}>
         <WelcomeMsg />
       </Suspense>
-      <ReminderInput />
+      <ReminderInput useLocal={!user} />
+      <SignUp />
       <Suspense fallback={<div>Loading tasks...</div>}>
         <TaskList />
       </Suspense>
@@ -29,38 +27,10 @@ async function WelcomeMsg() {
 
   if (!user) {
     return (
-      <>
+      <div className="mb-12">
         <h1 className="text-4xl font-bold">Welcome to Remind After!</h1>
-        <p>The simplest reminder app out there. Try it out!</p>
-        <div className="">
-          <h2>Create a free account to get reminders.</h2>
-          <div className="flex mt-6">
-            <div
-              className={cn(
-                "p-[2px] rounded-md bg-gradient-to-r",
-                Brand.gradient,
-              )}
-            >
-              <Link href="/sign-up">
-                <Button
-                  variant="outline"
-                  className="dark:text-white dark:bg-neutral-950 bg-white"
-                >
-                  <span
-                    className={cn(
-                      "bg-clip-text text-transparent bg-gradient-to-r text-xl",
-                      Brand.gradient,
-                      `hover:to-${Brand.secondary}`,
-                    )}
-                  >
-                    Sign up
-                  </span>
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </>
+        <p>The simplest reminder app out there.</p>
+      </div>
     );
   }
 

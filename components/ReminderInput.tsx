@@ -34,7 +34,7 @@ const getPlaceholder = (): string => {
   return placeholders[idx];
 };
 
-export function ReminderInput() {
+export function ReminderInput({ useLocal = false }: { useLocal?: boolean }) {
   const router = useRouter();
   const form = useForm<createTaskSchemaType>({
     resolver: zodResolver(createTaskSchema),
@@ -44,7 +44,11 @@ export function ReminderInput() {
   const onSubmit = async (data: createTaskSchemaType) => {
     const newData = { ...data, expiresAt: undefined };
     try {
-      await createTask(newData);
+      if (!useLocal) {
+        await createTask(newData);
+      } else {
+        console.log("local!!!");
+      }
       router.refresh();
       toast({
         title: "Success",
