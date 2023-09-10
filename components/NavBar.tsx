@@ -16,19 +16,21 @@ const NavLink: FC<NavProps> = (props) => (
   </Link>
 );
 
-export function NavBar() {
-  const user = currentUser();
+export async function NavBar() {
+  const user = await currentUser();
   return (
     <nav className="flex w-full items-center justify-center p-4 px-8 h-[60px]">
       <div className="flex flex-row flex-grow justify-start items-center w-full space-x-6">
         <Logo />
         <NavLink href="/home">Home</NavLink>
-        <NavLink href="/groups">Groups</NavLink>
+        {!!user && <NavLink href="/groups">Groups</NavLink>}
         <div className="flex flex-grow justify-end space-x-6 pr-6">
           <NavLink href="/about">About</NavLink>
-          <NavLink href="/settings">
-            <GearIcon title="Settings" />
-          </NavLink>
+          {!!user && (
+            <NavLink href="/settings">
+              <GearIcon title="Settings" />
+            </NavLink>
+          )}
         </div>
       </div>
       <div className="flex gap-4 items-center">

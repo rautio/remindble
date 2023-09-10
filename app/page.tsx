@@ -6,15 +6,10 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Brand } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import Home from "./home/page";
 
-export default async function Home() {
-  return (
-    <>
-      <Suspense fallback={<WelcomeMsgFallback />}>
-        <WelcomeMsg />
-      </Suspense>
-    </>
-  );
+export default async function Main() {
+  return <Home />;
 }
 
 async function WelcomeMsg() {
@@ -28,32 +23,33 @@ async function WelcomeMsg() {
     <div className="width: 75%">
       <div className="flex flex-col w-full mb-12">
         <h1 className="text-4xl font-bold">Welcome to Remind After!</h1>
-        <p>The simplest reminder app out there.</p>
-        <h2>Join the waiting list</h2>
-        <p>Sign up here to be the first to hear about our upcoming launch.</p>
-        <div className="flex mt-10">
-          <div
-            className={cn(
-              "p-[2px] rounded-md bg-gradient-to-r",
-              Brand.gradient,
-            )}
-          >
-            <Link href="/sign-up">
-              <Button
-                variant="outline"
-                className="dark:text-white dark:bg-neutral-950 bg-white"
-              >
-                <span
-                  className={cn(
-                    "bg-clip-text text-transparent bg-gradient-to-r ",
-                    Brand.gradient,
-                    `hover:to-${Brand.secondary}`,
-                  )}
+        <p>The simplest reminder app out there. Try it out!</p>
+        <div className="">
+          <h2>Create a free account to get reminders.</h2>
+          <div className="flex mt-6">
+            <div
+              className={cn(
+                "p-[2px] rounded-md bg-gradient-to-r",
+                Brand.gradient,
+              )}
+            >
+              <Link href="/sign-up">
+                <Button
+                  variant="outline"
+                  className="dark:text-white dark:bg-neutral-950 bg-white"
                 >
-                  Join the waitlist
-                </span>
-              </Button>
-            </Link>
+                  <span
+                    className={cn(
+                      "bg-clip-text text-transparent bg-gradient-to-r text-xl",
+                      Brand.gradient,
+                      `hover:to-${Brand.secondary}`,
+                    )}
+                  >
+                    Sign up
+                  </span>
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

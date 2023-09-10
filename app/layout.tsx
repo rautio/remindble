@@ -32,9 +32,13 @@ export default function RootLayout({
             <div className="flex min-h-screen w-full flex-col items-center dark:bg-black">
               <NavBar />
               <Separator />
-              <main className="flex flex-grow w-full justify-center items-center dark:bg-neutral-950">
-                {children}
+              <main className="flex flex-grow flex-col min-h-screen w-full justify-center items-center dark:bg-neutral-950">
                 <Toaster />
+                <div className="flex flex-grow w-full justify-center">
+                  <div className="max-w-[920px] flex flex-col flex-grow px-4 py-12">
+                    {children}
+                  </div>
+                </div>
               </main>
             </div>
           </ThemeProvider>
