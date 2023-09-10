@@ -19,6 +19,26 @@ export async function createTask(data: createTaskSchemaType) {
   });
 }
 
+export async function editTask(id: number, data: createTaskSchemaType) {
+  const user = await currentUser();
+
+  if (!user) {
+    throw new Error("User not found.");
+  }
+  const { content, expiresAt } = data;
+
+  return await prisma.task.update({
+    where: {
+      id,
+    },
+    data: {
+      userId: user.id,
+      content,
+      expiresAt,
+    },
+  });
+}
+
 export async function setTaskToDone(id: number) {
   const user = await currentUser();
 
