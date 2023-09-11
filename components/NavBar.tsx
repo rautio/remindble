@@ -26,6 +26,7 @@ export async function NavBar() {
         {!!user && <NavLink href="/groups">Groups</NavLink>}
         <div className="flex flex-grow justify-end space-x-6 pr-6">
           <NavLink href="/about">About</NavLink>
+          {!user && <NavLink href="/sign-in">Sign In</NavLink>}
           {!!user && (
             <NavLink href="/settings">
               <GearIcon title="Settings" />
