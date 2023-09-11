@@ -12,12 +12,12 @@ import {
   DialogContent,
   DialogDescription,
 } from "./ui/dialog";
-import { deleteTask, editTask } from "@/actions/task";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { toast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTask } from "@/context/api";
 import {
   Form,
   FormControl,
@@ -42,6 +42,7 @@ function getExpirationColor(expiresAt: Date) {
 
 export function TaskCard({ task }: { task: Task }) {
   const [edit, setEdit] = useState(false);
+  const { edit: editTask, delete: deleteTask } = useTask();
   const form = useForm<Task>({
     resolver: zodResolver(createTaskSchema),
     defaultValues: { ...task, expiresAt: task.expiresAt || undefined },

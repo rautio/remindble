@@ -7,6 +7,7 @@ export async function createTask(data: createTaskSchemaType) {
   const user = await currentUser();
 
   if (!user) {
+    // Use local db
     throw new Error("User not found.");
   }
   const { content, expiresAt } = data;

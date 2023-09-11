@@ -14,11 +14,11 @@ import {
   FormLabel,
 } from "./ui/form";
 import { createTaskSchema, createTaskSchemaType } from "@/schema/createTask";
-import { createTask } from "@/actions/task";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { useTask } from "@/context/api";
 
 const placeholders = [
   "Start the laundry in 2 hours",
@@ -36,6 +36,7 @@ const getPlaceholder = (): string => {
 
 export function ReminderInput({ useLocal = false }: { useLocal?: boolean }) {
   const router = useRouter();
+  const { create } = useTask();
   const form = useForm<createTaskSchemaType>({
     resolver: zodResolver(createTaskSchema),
     defaultValues: { content: "" },
@@ -44,16 +45,12 @@ export function ReminderInput({ useLocal = false }: { useLocal?: boolean }) {
   const onSubmit = async (data: createTaskSchemaType) => {
     const newData = { ...data, expiresAt: undefined };
     try {
-      if (!useLocal) {
-        await createTask(newData);
-      } else {
-        console.log("local!!!");
-      }
-      router.refresh();
+      await create(newData);
       toast({
         title: "Success",
         description: "Reminder added succesfully.",
       });
+      router.refresh();
     } catch (e: any) {
       toast({
         title: "Error",
@@ -62,7 +59,7 @@ export function ReminderInput({ useLocal = false }: { useLocal?: boolean }) {
       });
     }
   };
-  React.useEffect(() => {
+  useEffect(() => {
     if (formState.isSubmitSuccessful) {
       reset();
     }

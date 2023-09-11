@@ -6,6 +6,7 @@ import TaskCard from "@/components/TaskCard";
 import prisma from "@/lib/prisma";
 import { Task } from "@prisma/client";
 import SignUp from "@/components/SignUp";
+import IndexedTaskList from "@/components/IndexedTaskList";
 export default async function Home() {
   const user = await currentUser();
   return (
@@ -16,7 +17,7 @@ export default async function Home() {
       <ReminderInput useLocal={!user} />
       <SignUp />
       <Suspense fallback={<div>Loading tasks...</div>}>
-        <TaskList />
+        {user ? <TaskList /> : <IndexedTaskList />}
       </Suspense>
     </>
   );
@@ -64,8 +65,6 @@ export async function TaskList() {
         userId: user?.id,
       },
     });
-  } else {
-    // TODO: Use browser storage for tasks.
   }
   if (tasks.length === 0) return null;
   return (
