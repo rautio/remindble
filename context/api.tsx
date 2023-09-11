@@ -17,7 +17,11 @@ interface APIFunctions {
   deleteTask: (id: number) => Promise<any>;
 }
 
-const APIContext = createContext<APIFunctions>({ ...local });
+interface APICtx {
+  api: APIFunctions;
+}
+
+const APIContext = createContext<APICtx>({ api: { ...local } });
 
 interface Props {
   children?: ReactNode;
@@ -32,7 +36,7 @@ export const APIProvider: FC<Props> = ({ children }) => {
     }
   }, [useDB]);
   return (
-    <APIContext.Provider value={useDB ? { ...dbTask } : { ...local }}>
+    <APIContext.Provider value={{ api: useDB ? { ...dbTask } : { ...local } }}>
       {children}
     </APIContext.Provider>
   );
@@ -45,6 +49,6 @@ interface UseTask {
 }
 
 export const useTask = (): UseTask => {
-  const API = useContext(APIContext);
-  return { edit: API.editTask, create: API.createTask, delete: API.deleteTask };
+  const { api } = useContext(APIContext);
+  return { edit: api.editTask, create: api.createTask, delete: api.deleteTask };
 };

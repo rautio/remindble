@@ -1,20 +1,30 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import TaskCard from "@/components/TaskCard";
-import { getTasks, IndexedTask } from "@/lib/indexedDB";
+import { getTasks, IndexedTask, TaskObservable } from "@/lib/indexedDB";
 
 export function TaskList() {
   const [tasks, setTasks] = useState<IndexedTask[]>([]);
   const [loading, setLoading] = useState(false);
+  const fetchTasks = useMemo(
+    () => () =>
+      getTasks()
+        .then((indexedTasks: IndexedTask[]) => {
+          setTasks(indexedTasks);
+        })
+        .finally(() => {
+          setLoading(false);
+        }),
+    [],
+  );
   useEffect(() => {
     setLoading(true);
-    getTasks()
-      .then((indexedTasks: IndexedTask[]) => {
-        setTasks(indexedTasks);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    fetchTasks();
+    // Re-fetch tasks on each create, edit or delete
+    TaskObservable.subscribe(fetchTasks);
+    return () => {
+      TaskObservable.unsubscribe(fetchTasks);
+    };
   }, []);
   if (tasks.length === 0) return null;
   return (

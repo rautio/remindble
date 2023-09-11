@@ -1,5 +1,25 @@
 import { createTaskSchemaType } from "@/schema/createTask";
-import { Task } from "@prisma/client";
+
+type ObserveFunction = (data?: unknown) => void;
+
+class Observable {
+  observers: ObserveFunction[];
+
+  constructor() {
+    this.observers = [];
+  }
+  public subscribe(fn: ObserveFunction) {
+    this.observers.push(fn);
+  }
+  public unsubscribe(fn: ObserveFunction) {
+    this.observers = this.observers.filter((observer) => observer !== fn);
+  }
+  public notify(data?: unknown) {
+    this.observers.forEach((observer) => observer(data));
+  }
+}
+
+export const TaskObservable = new Observable();
 
 export interface IndexedTask extends createTaskSchemaType {
   lastSync?: Date;
@@ -41,6 +61,7 @@ export const createTask = async (data: createTaskSchemaType) => {
       let q = store.put(newData);
       txn.oncomplete = function () {
         db.close();
+        TaskObservable.notify();
         resolve("success");
       };
       txn.onerror = function (e: unknown) {
@@ -61,6 +82,7 @@ export const deleteTask = async (id: number) => {
       store.delete(id);
       txn.oncomplete = function () {
         db.close();
+        TaskObservable.notify();
         resolve("success");
       };
       txn.onerror = function (e: unknown) {
@@ -78,11 +100,12 @@ export const editTask = async (id: number, data: createTaskSchemaType) => {
       const db = event.target.result;
       const txn = db.transaction(TASKS, "readwrite");
       const store = txn.objectStore(TASKS);
+      // Merge with current value in case there were changes done elsewhere
       let cur = store.get(id);
-      console.log({ cur });
-      let q = store.put({ ...newData, id });
+      store.put({ ...cur, ...newData }, id);
       txn.oncomplete = function () {
         db.close();
+        TaskObservable.notify();
         resolve("success");
       };
       txn.onerror = function (e: unknown) {
