@@ -86,7 +86,12 @@ export function TaskCard({ task }: { task: Task }) {
           </p>
         )}
       </div>
-      <Dialog open={edit}>
+      <Dialog
+        open={edit}
+        onOpenChange={(newOpen: boolean) => {
+          setEdit(newOpen);
+        }}
+      >
         <DialogTrigger asChild>
           <Button
             className="hidden group-hover:block bg-indigo-300 hover:bg-indigo-400 dark:bg-sky-600 dark:hover:bg-sky-700"
