@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 export const Signup = () => {
   return (
-    <div className="">
-      <div className="flex items-center justify-center m-12">
+    <div className="flex items-center flex-col justify-center mb-12">
+      <div className="flex items-center justify-center m-6 space-x-6">
         <div
           className={cn(
             "p-[2px] rounded-md bg-gradient-to-r",
@@ -45,6 +45,7 @@ export const Signup = () => {
           </Button>
         </Link>
       </div>
+      <span className="text-xs">Sync devices</span>
     </div>
   );
 };

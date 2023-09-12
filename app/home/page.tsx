@@ -15,7 +15,7 @@ export default async function Home() {
         <WelcomeMsg />
       </Suspense>
       <ReminderInput useLocal={!user} />
-      <SignUp />
+      {!user && <SignUp />}
       <Suspense fallback={<div>Loading tasks...</div>}>
         {user ? <TaskList /> : <IndexedTaskList />}
       </Suspense>
@@ -29,7 +29,7 @@ async function WelcomeMsg() {
   if (!user) {
     return (
       <div className="mb-12">
-        <h1 className="text-4xl font-bold">Welcome to Remind After!</h1>
+        <h1 className="text-4xl font-bold">Welcome to Remindble!</h1>
         <p>The simplest reminder app out there.</p>
       </div>
     );

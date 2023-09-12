@@ -12,7 +12,7 @@ export function Logo() {
           Brand.gradient,
         )}
       >
-        RemindAfter
+        Remindble
       </h1>
     </Link>
   );
