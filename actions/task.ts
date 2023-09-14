@@ -19,6 +19,23 @@ export async function createTask(data: createTaskSchemaType) {
     },
   });
 }
+export async function bulkCreateTask(tasks: createTaskSchemaType[]) {
+  const user = await currentUser();
+
+  if (!user) {
+    // Use local db
+    throw new Error("User not found.");
+  }
+  const newTasks = tasks.map((data) => {
+    const { content, expiresAt } = data;
+    return {
+      userId: user.id,
+      content,
+      expiresAt,
+    };
+  });
+  return await prisma.task.createMany({ data: newTasks });
+}
 
 export async function editTask(id: number, data: createTaskSchemaType) {
   const user = await currentUser();

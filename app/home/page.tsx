@@ -7,6 +7,7 @@ import prisma from "@/lib/prisma";
 import { Task } from "@prisma/client";
 import SignUp from "@/components/SignUp";
 import IndexedTaskList from "@/components/IndexedTaskList";
+import { SyncTasks } from "@/context/api";
 export default async function Home() {
   const user = await currentUser();
   return (
@@ -30,7 +31,7 @@ async function WelcomeMsg() {
     return (
       <div className="mb-12">
         <h1 className="text-4xl font-bold">Welcome to Remindble!</h1>
-        <p>The simplest reminder app out there.</p>
+        <p>Free the clutter from your mind by writing it down.</p>
       </div>
     );
   }
@@ -76,6 +77,7 @@ export async function TaskList() {
         {tasks.map((task) => (
           <TaskCard task={task} key={task.id} />
         ))}
+        {/* <SyncTasks tasks={tasks} /> */}
       </div>
     </div>
   );
