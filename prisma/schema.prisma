@@ -17,7 +17,7 @@ model Task {
   content       String
   userId        String // Clerk id
   done          Boolean @default(false)
-  expiresAt     DateTime?
+  expiresAt     DateTime @default(dbgenerated("NOW() + interval '1 hour'")) // Default reminder is 1 hour from now
   createdAt     DateTime @default(now())
 }
 
