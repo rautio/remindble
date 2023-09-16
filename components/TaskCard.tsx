@@ -27,7 +27,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import { TrashIcon, ReloadIcon } from "@radix-ui/react-icons";
+import { TrashIcon, CalendarIcon, ReloadIcon } from "@radix-ui/react-icons";
 import { useForm } from "react-hook-form";
 import { createTaskSchema } from "@/schema/createTask";
 
@@ -50,7 +50,14 @@ export function TaskCard({ task }: { task: Task }) {
   const { formState } = form;
   const onSubmit = async (data: Task) => {
     const { id } = task;
-    const { content, expiresAt } = data;
+    let { content, expiresAt } = data;
+    // Parse expires at from content
+    if (content.endsWith("in 1 minute")) {
+      const d1 = new Date(new Date().getTime() + 1 * 60000);
+      let diff = d1.getTimezoneOffset();
+      expiresAt = new Date(d1.getTime() - diff * 60000);
+    }
+    console.log({ content, id, expiresAt });
     try {
       await editTask(id, { content, expiresAt: expiresAt || undefined });
       router.refresh();
@@ -130,6 +137,19 @@ export function TaskCard({ task }: { task: Task }) {
                 )}
               />
               <FormMessage />
+              <FormField
+                control={form.control}
+                name="expiresAt"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Expires at</FormLabel>
+                    <FormDescription>
+                      {field.value?.toLocaleDateString()}{" "}
+                      {field.value?.toLocaleTimeString()}
+                    </FormDescription>
+                  </FormItem>
+                )}
+              />
               <DialogFooter className="mt-6">
                 <Button
                   disabled={formState.isSubmitting}
