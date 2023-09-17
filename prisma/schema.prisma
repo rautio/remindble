@@ -19,6 +19,8 @@ model Task {
   done          Boolean @default(false)
   expiresAt     DateTime @default(dbgenerated("NOW() + interval '1 hour'")) // Default reminder is 1 hour from now
   createdAt     DateTime @default(now())
+  schedule      String @default("in 1 hour")
+  repeat        Boolean @default(false)
 }
 
 // User info & settings
@@ -30,4 +32,11 @@ model User {
   lastName      String?
   timezone      String? // Important since all reminders in DB are stored in UTC
   phoneNumber   String?
+  createdAt     DateTime @default(now()) // Keep track of when the user account was created
+  access        Access @default(WAITLIST)
+}
+
+enum Access {
+  WAITLIST 
+  LA
 }
