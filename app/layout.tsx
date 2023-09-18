@@ -1,6 +1,5 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import { Separator } from "@/components/ui/separator";
 import { NavBar } from "@/components/NavBar";
@@ -8,21 +7,25 @@ import { ThemeProvider } from "@/providers/ThemeProvider";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { APIProvider } from "@/context/api";
+import { getServerSession } from "next-auth/next";
+import SessionProvider from "@/context/session";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Remind After",
+  title: "Remindble",
   description: "A simple reminder application",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authOptions);
   return (
-    <ClerkProvider>
+    <SessionProvider session={session}>
       <html
         lang="en"
         className={cn(inter.className, "dark")}
@@ -47,6 +50,6 @@ export default function RootLayout({
           </ThemeProvider>
         </body>
       </html>
-    </ClerkProvider>
+    </SessionProvider>
   );
 }

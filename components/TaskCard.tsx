@@ -57,7 +57,6 @@ export function TaskCard({ task }: { task: Task }) {
       let diff = d1.getTimezoneOffset();
       expiresAt = new Date(d1.getTime() - diff * 60000);
     }
-    console.log({ content, id, expiresAt });
     try {
       await editTask(id, { content, expiresAt: expiresAt || undefined });
       router.refresh();

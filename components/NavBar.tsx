@@ -1,4 +1,4 @@
-import { UserButton, currentUser } from "@clerk/nextjs";
+import { getServerSession } from "next-auth/next";
 import React, { FC } from "react";
 import { Logo } from "@/components/Logo";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
@@ -17,17 +17,17 @@ const NavLink: FC<NavProps> = (props) => (
 );
 
 export async function NavBar() {
-  const user = await currentUser();
+  const session = await getServerSession();
   return (
     <nav className="flex w-full items-center justify-center p-4 px-8 h-[60px]">
       <div className="flex flex-row flex-grow justify-start items-center w-full space-x-6">
         <Logo />
         <NavLink href="/home">Home</NavLink>
-        {!!user && <NavLink href="/groups">Groups</NavLink>}
+        {!!session && <NavLink href="/groups">Groups</NavLink>}
         <div className="flex flex-grow justify-end space-x-6 pr-6">
           <NavLink href="/about">About</NavLink>
-          {!user && <NavLink href="/sign-in">Sign In</NavLink>}
-          {!!user && (
+          {!session && <NavLink href="/sign-in">Sign In</NavLink>}
+          {!!session && (
             <NavLink href="/settings">
               <GearIcon title="Settings" />
             </NavLink>
@@ -35,7 +35,7 @@ export async function NavBar() {
         </div>
       </div>
       <div className="flex gap-4 items-center">
-        {!!user && <UserButton afterSignOutUrl="/" />}
+        {!!session && <div>User</div>}
         <ThemeSwitcher />
       </div>
     </nav>

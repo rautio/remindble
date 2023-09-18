@@ -1,4 +1,4 @@
-# Remind After
+# Remindble
 
 A simple reminder app built using Next.js, TypeScript, Tailwind and Prisma.
 

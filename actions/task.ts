@@ -1,11 +1,11 @@
 "use server";
 import prisma from "@/lib/prisma";
 import { createTaskSchemaType } from "@/schema/createTask";
-import { currentUser } from "@clerk/nextjs";
+import { getServerSession } from "next-auth";
 
 export async function createTask(data: createTaskSchemaType) {
-  const user = await currentUser();
-
+  const session = await getServerSession();
+  const user = session?.user;
   if (!user) {
     // Use local db
     throw new Error("User not found.");
@@ -20,7 +20,8 @@ export async function createTask(data: createTaskSchemaType) {
   });
 }
 export async function bulkCreateTask(tasks: createTaskSchemaType[]) {
-  const user = await currentUser();
+  const session = await getServerSession();
+  const user = session?.user;
 
   if (!user) {
     // Use local db
@@ -38,7 +39,8 @@ export async function bulkCreateTask(tasks: createTaskSchemaType[]) {
 }
 
 export async function editTask(id: number, data: createTaskSchemaType) {
-  const user = await currentUser();
+  const session = await getServerSession();
+  const user = session?.user;
 
   if (!user) {
     throw new Error("User not found.");
@@ -58,7 +60,8 @@ export async function editTask(id: number, data: createTaskSchemaType) {
 }
 
 export async function setTaskToDone(id: number) {
-  const user = await currentUser();
+  const session = await getServerSession();
+  const user = session?.user;
 
   if (!user) {
     throw new Error("User not found.");
@@ -75,7 +78,8 @@ export async function setTaskToDone(id: number) {
 }
 
 export async function deleteTask(id: number) {
-  const user = await currentUser();
+  const session = await getServerSession();
+  const user = session?.user;
 
   if (!user) {
     throw new Error("User not found.");

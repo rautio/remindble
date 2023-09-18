@@ -9,7 +9,6 @@ import React, {
 import { Task } from "@prisma/client";
 import * as dbTask from "@/actions/task";
 import * as local from "@/lib/indexedDB";
-import { useUser } from "@clerk/nextjs";
 import { createTaskSchemaType } from "@/schema/createTask";
 
 interface APIFunctions {
@@ -29,7 +28,9 @@ interface Props {
 }
 
 export const APIProvider: FC<Props> = ({ children }) => {
-  const { isSignedIn, isLoaded } = useUser();
+  // const { isSignedIn, isLoaded } = useUser();
+  const isSignedIn = true;
+  const isLoaded = true;
   const useDB = isLoaded && isSignedIn;
   useEffect(() => {
     if (!useDB) {

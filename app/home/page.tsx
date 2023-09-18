@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs";
+import { getServerSession } from "next-auth/next";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import ReminderInput from "@/components/ReminderInput";
@@ -9,25 +9,25 @@ import SignUp from "@/components/SignUp";
 import IndexedTaskList from "@/components/IndexedTaskList";
 import { SyncTasks } from "@/context/api";
 export default async function Home() {
-  const user = await currentUser();
+  const session = await getServerSession();
   return (
     <>
       <Suspense fallback={<WelcomeMsgFallback />}>
         <WelcomeMsg />
       </Suspense>
-      <ReminderInput useLocal={!user} />
-      {!user && <SignUp />}
+      <ReminderInput useLocal={!session} />
+      {!session && <SignUp />}
       <Suspense fallback={<div>Loading tasks...</div>}>
-        {user ? <TaskList /> : <IndexedTaskList />}
+        {session ? <TaskList /> : <IndexedTaskList />}
       </Suspense>
     </>
   );
 }
 
 async function WelcomeMsg() {
-  const user = await currentUser();
+  const session = await getServerSession();
 
-  if (!user) {
+  if (!session) {
     return (
       <div className="mb-12">
         <h1 className="text-4xl font-bold">Welcome to Remindble!</h1>
@@ -40,7 +40,7 @@ async function WelcomeMsg() {
     <div className="flex w-full mb-12">
       <h1 className="text-4xl font-bold">
         Welcome, <br />
-        {user.firstName} {user.lastName}
+        firstName lastName
       </h1>
     </div>
   );
@@ -58,12 +58,12 @@ function WelcomeMsgFallback() {
 }
 
 export async function TaskList() {
-  const user = await currentUser();
+  const session = await getServerSession();
   let tasks: Task[] = [];
-  if (user) {
+  if (session) {
     tasks = await prisma.task.findMany({
       where: {
-        userId: user?.id,
+        userId: session.user?.id,
       },
     });
   }
