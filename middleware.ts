@@ -1,8 +1,7 @@
 import { withAuth } from "next-auth/middleware";
+import { publicRoutes } from "@/lib/constants";
 
 // Middleware is applied to all routes, use conditionals to select
-
-const publicRoutes = ["/", "/home", "/about", "/sign-in", "/sign-up"];
 
 export default withAuth(function middleware(req) {}, {
   callbacks: {

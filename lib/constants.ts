@@ -18,3 +18,5 @@ export enum Brand {
   secondary = "emerald-500",
   secondaryDark = "emerald-600",
 }
+
+export const publicRoutes = ["/", "/home", "/about"];
