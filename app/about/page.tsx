@@ -1,3 +1,3 @@
-export default async function Groups() {
-  return <>Groups</>;
+export default async function About() {
+  return <>About</>;
 }

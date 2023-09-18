@@ -2,7 +2,6 @@
 import React from "react";
 import { signIn } from "next-auth/react";
 import { Button } from "../ui/button";
-import { NavLink } from "./";
 
 export const SignIn = () => (
   <Button
