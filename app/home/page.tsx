@@ -8,6 +8,7 @@ import { Task } from "@prisma/client";
 import SignUp from "@/components/SignUp";
 import IndexedTaskList from "@/components/IndexedTaskList";
 import { SyncTasks } from "@/context/api";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 export default async function Home() {
   const session = await getServerSession();
   return (
@@ -58,12 +59,12 @@ function WelcomeMsgFallback() {
 }
 
 export async function TaskList() {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   let tasks: Task[] = [];
-  if (session) {
+  if (session?.user?.id) {
     tasks = await prisma.task.findMany({
       where: {
-        userId: session.user?.id,
+        userId: session.user.id,
       },
     });
   }

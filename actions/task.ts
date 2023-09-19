@@ -2,35 +2,36 @@
 import prisma from "@/lib/prisma";
 import { createTaskSchemaType } from "@/schema/createTask";
 import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function createTask(data: createTaskSchemaType) {
-  const session = await getServerSession();
-  const user = session?.user;
-  if (!user) {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
+  if (!userId) {
     // Use local db
     throw new Error("User not found.");
   }
   const { content, expiresAt } = data;
   return await prisma.task.create({
     data: {
-      userId: user.id,
+      userId,
       content,
       expiresAt,
     },
   });
 }
 export async function bulkCreateTask(tasks: createTaskSchemaType[]) {
-  const session = await getServerSession();
-  const user = session?.user;
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
 
-  if (!user) {
+  if (!userId) {
     // Use local db
     throw new Error("User not found.");
   }
   const newTasks = tasks.map((data) => {
     const { content, expiresAt } = data;
     return {
-      userId: user.id,
+      userId,
       content,
       expiresAt,
     };
@@ -39,10 +40,10 @@ export async function bulkCreateTask(tasks: createTaskSchemaType[]) {
 }
 
 export async function editTask(id: number, data: createTaskSchemaType) {
-  const session = await getServerSession();
-  const user = session?.user;
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
 
-  if (!user) {
+  if (!userId) {
     throw new Error("User not found.");
   }
   const { content, expiresAt } = data;
@@ -52,7 +53,7 @@ export async function editTask(id: number, data: createTaskSchemaType) {
       id,
     },
     data: {
-      userId: user.id,
+      userId,
       content,
       expiresAt,
     },
@@ -60,16 +61,16 @@ export async function editTask(id: number, data: createTaskSchemaType) {
 }
 
 export async function setTaskToDone(id: number) {
-  const session = await getServerSession();
-  const user = session?.user;
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
 
-  if (!user) {
+  if (!userId) {
     throw new Error("User not found.");
   }
   return await prisma.task.update({
     where: {
       id,
-      userId: user.id,
+      userId,
     },
     data: {
       done: true,
@@ -78,16 +79,16 @@ export async function setTaskToDone(id: number) {
 }
 
 export async function deleteTask(id: number) {
-  const session = await getServerSession();
-  const user = session?.user;
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
 
-  if (!user) {
+  if (!userId) {
     throw new Error("User not found.");
   }
   return await prisma.task.delete({
     where: {
       id,
-      userId: user.id,
+      userId,
     },
   });
 }
