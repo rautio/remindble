@@ -1,21 +1,10 @@
 import { getServerSession } from "next-auth/next";
-import React, { FC } from "react";
+import React, { FC, Suspense } from "react";
 import { Logo } from "@/components/Logo";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import Link from "next/link";
-import { Button } from "../ui/button";
-import { GearIcon } from "../icons/Gear";
-import Signout from "./Signout";
 import Signin from "./Signin";
+import SettingsDropdown from "./SettingsDropdown";
 
 interface NavProps {
   href: string;
@@ -42,26 +31,7 @@ export async function NavBar() {
         <div className="flex flex-grow justify-end space-x-6 pr-6">
           <NavLink href="/about">About</NavLink>
           {!session && <Signin />}
-          {!!session && (
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Button variant="ghost">
-                  <GearIcon title="Settings" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <Link href="/settings">Settings</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <Signout />
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+          {!!session && <SettingsDropdown />}
         </div>
       </div>
       <div className="flex gap-4 items-center">
