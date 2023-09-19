@@ -24,6 +24,7 @@ export const SettingsDropdown = ({}) => {
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <Link href="/settings">Settings</Link>
+            <Link href="/settings#profile">Profile</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

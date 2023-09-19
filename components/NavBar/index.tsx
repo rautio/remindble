@@ -1,10 +1,10 @@
 import { getServerSession } from "next-auth/next";
 import React, { FC, Suspense } from "react";
 import { Logo } from "@/components/Logo";
-import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import Link from "next/link";
 import Signin from "./Signin";
 import SettingsDropdown from "./SettingsDropdown";
+import Avatar from "./Avatar";
 
 interface NavProps {
   href: string;
@@ -35,7 +35,7 @@ export async function NavBar() {
         </div>
       </div>
       <div className="flex gap-4 items-center">
-        <ThemeSwitcher />
+        <Avatar />
       </div>
     </nav>
   );
