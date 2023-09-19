@@ -34,9 +34,11 @@ export async function NavBar() {
           {!!session && <SettingsDropdown />}
         </div>
       </div>
-      <div className="flex gap-4 items-center">
-        <Avatar />
-      </div>
+      {!!session && (
+        <div className="flex gap-4 items-center">
+          <Avatar />
+        </div>
+      )}
     </nav>
   );
 }
