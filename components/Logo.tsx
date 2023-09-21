@@ -2,6 +2,8 @@ import React from "react";
 import { Brand } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import Image from "next/image";
+import SvgLogo from "@/public/remindble-logo-bg.svg";
 
 export function Logo() {
   return (
@@ -13,6 +15,14 @@ export function Logo() {
         )}
       >
         Remindble
+        <Image
+          style={{ display: "inline", lineHeight: "32px" }}
+          width={30}
+          height={30}
+          priority
+          src={SvgLogo}
+          alt="Remindble"
+        />
       </h1>
     </Link>
   );
