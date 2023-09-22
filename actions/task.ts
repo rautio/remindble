@@ -1,11 +1,10 @@
 "use server";
 import prisma from "@/lib/prisma";
 import { createTaskSchemaType } from "@/schema/createTask";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getSession } from "./utils";
 
 export async function createTask(data: createTaskSchemaType) {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
   const userId = session?.user?.id;
   if (!userId) {
     // Use local db
@@ -21,7 +20,7 @@ export async function createTask(data: createTaskSchemaType) {
   });
 }
 export async function bulkCreateTask(tasks: createTaskSchemaType[]) {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) {
@@ -40,7 +39,7 @@ export async function bulkCreateTask(tasks: createTaskSchemaType[]) {
 }
 
 export async function editTask(id: number, data: createTaskSchemaType) {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) {
@@ -61,7 +60,7 @@ export async function editTask(id: number, data: createTaskSchemaType) {
 }
 
 export async function setTaskToDone(id: number) {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) {
@@ -79,7 +78,7 @@ export async function setTaskToDone(id: number) {
 }
 
 export async function deleteTask(id: number) {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) {

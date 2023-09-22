@@ -1,4 +1,3 @@
-import { getServerSession } from "next-auth/next";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import ReminderInput from "@/components/ReminderInput";
@@ -8,9 +7,9 @@ import { Task } from "@prisma/client";
 import SignUp from "@/components/SignUp";
 import IndexedTaskList from "@/components/IndexedTaskList";
 import { SyncTasks } from "@/context/api";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { getSession } from "@/actions/utils";
 export default async function Home() {
-  const session = await getServerSession();
+  const session = await getSession();
   return (
     <>
       <Suspense fallback={<WelcomeMsgFallback />}>
@@ -26,7 +25,7 @@ export default async function Home() {
 }
 
 async function WelcomeMsg() {
-  const session = await getServerSession();
+  const session = await getSession();
 
   if (!session) {
     return (
@@ -59,7 +58,7 @@ function WelcomeMsgFallback() {
 }
 
 export async function TaskList() {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
   let tasks: Task[] = [];
   if (session?.user?.id) {
     tasks = await prisma.task.findMany({
