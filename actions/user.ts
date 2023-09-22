@@ -13,3 +13,15 @@ export const getUserProfile = async () => {
     },
   });
 };
+
+export const getUserAccount = async () => {
+  const session = await getSession();
+  if (!session?.user?.id) {
+    throw new Error("User not found.");
+  }
+  return await prisma.account.findFirst({
+    where: {
+      userId: session.user.id,
+    },
+  });
+};
