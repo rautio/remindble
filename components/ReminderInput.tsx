@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import { parseText, nextDate } from "crontext";
 import { Input } from "@/components/ui/input";
+import ErrorBoundary from "./ErrorBoundary";
 import { cn } from "@/lib/utils";
 import { Brand } from "@/lib/constants";
 import { Button } from "./ui/button";
@@ -74,69 +75,89 @@ export function ReminderInput({ useLocal = false }: { useLocal?: boolean }) {
         <FormField
           control={form.control}
           name="content"
-          render={({ field }) => (
-            <>
-              <FormItem>
-                <FormLabel>
-                  <span
-                    className={cn(
-                      "text-2xl font-bold bg-clip-text text-transparent",
-                      `bg-gradient-to-r from-indigo-500 from-10% to-sky-500`,
-                    )}
-                  >
-                    Remind me to...
-                  </span>
-                </FormLabel>
-                <div className="ml-12">
-                  <div
-                    className={cn(
-                      "p-1 rounded-md bg-gradient-to-r",
-                      Brand.gradient,
-                      `hover:to-${Brand.secondary}`,
-                    )}
-                  >
-                    <FormControl>
-                      <Input
-                        suppressHydrationWarning
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            form.handleSubmit(onSubmit)();
-                          }
-                        }}
-                        placeholder={getPlaceholder()}
-                        className={cn("text-xl p-8 dark:bg-black bg-white")}
-                        {...field}
-                      />
-                    </FormControl>
-                  </div>
-                  <FormMessage />
-                </div>
-              </FormItem>
-              <div className="float-right mt-4 h-24">
-                {field.value && (
-                  <div className="flex flex-col">
-                    <Button
-                      disabled={formState.isSubmitting}
+          render={({ field }) => {
+            const { value } = field;
+            const schedule = parseText(value);
+            const next = nextDate(schedule);
+            return (
+              <ErrorBoundary>
+                <FormItem>
+                  <FormLabel>
+                    <span
                       className={cn(
-                        "text-lg mb-2 p-6",
-                        `bg-emerald-500 hover:bg-emerald-700`,
-                        `dark:bg-emerald-500 dark:hover:bg-emerald-700`,
+                        "text-2xl font-bold bg-clip-text text-transparent",
+                        `bg-gradient-to-r from-indigo-500 from-10% to-sky-500`,
                       )}
-                      onClick={form.handleSubmit(onSubmit)}
                     >
-                      + Add Reminder
-                      {formState.isSubmitting && (
-                        <ReloadIcon className="ml-2 h-4 w-4 animate-spin" />
+                      Remind me to...
+                    </span>
+                  </FormLabel>
+                  <div className="ml-12">
+                    <div
+                      className={cn(
+                        "p-1 rounded-md bg-gradient-to-r",
+                        Brand.gradient,
+                        `hover:to-${Brand.secondary}`,
                       )}
-                    </Button>
-                    <span className="text-xs text-neutral-500 text-right">
-                      ...or just press the "Enter" key
+                    >
+                      <FormControl>
+                        <Input
+                          suppressHydrationWarning
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              form.handleSubmit(onSubmit)();
+                            }
+                          }}
+                          placeholder={getPlaceholder()}
+                          className={cn("text-xl p-8 dark:bg-black bg-white")}
+                          {...field}
+                        />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </div>
+                </FormItem>
+                {value && (
+                  <div className="text-sm text-neutral-400 text-center mt-4">
+                    Next Occurrence:{" "}
+                    <span className="text-neutral-50" suppressHydrationWarning>
+                      {next.toLocaleDateString("en-us", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                      })}
                     </span>
                   </div>
                 )}
-              </div>
-            </>
-          )}
+                <div className="float-right mt-4 h-24">
+                  {field.value && (
+                    <div className="flex flex-col">
+                      <Button
+                        disabled={formState.isSubmitting}
+                        className={cn(
+                          "text-lg mb-2 p-6",
+                          `bg-emerald-500 hover:bg-emerald-700`,
+                          `dark:bg-emerald-500 dark:hover:bg-emerald-700`,
+                        )}
+                        onClick={form.handleSubmit(onSubmit)}
+                      >
+                        + Add Reminder
+                        {formState.isSubmitting && (
+                          <ReloadIcon className="ml-2 h-4 w-4 animate-spin" />
+                        )}
+                      </Button>
+                      <span className="text-xs text-neutral-500 text-right">
+                        ...or just press the "Enter" key
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </ErrorBoundary>
+            );
+          }}
         />
       </form>
     </Form>
