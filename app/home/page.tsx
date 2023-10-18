@@ -40,7 +40,7 @@ async function WelcomeMsg() {
     <div className="flex w-full mb-12">
       <h1 className="text-4xl font-bold">
         Welcome, <br />
-        firstName lastName
+        {session.user?.name || session.user?.email}
       </h1>
     </div>
   );

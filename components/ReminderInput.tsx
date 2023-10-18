@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
+import { parseText, nextDate } from "crontext";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Brand } from "@/lib/constants";
@@ -43,7 +44,10 @@ export function ReminderInput({ useLocal = false }: { useLocal?: boolean }) {
   });
   const { formState, reset } = form;
   const onSubmit = async (data: createTaskSchemaType) => {
-    const newData = { ...data, expiresAt: undefined };
+    const schedule = parseText(data.content);
+    const expires = nextDate(schedule);
+    const newData = { ...data, expiresAt: expires };
+    // TODO - does it repeat?
     try {
       await create(newData);
       toast({
