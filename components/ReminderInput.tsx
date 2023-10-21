@@ -79,6 +79,7 @@ export function ReminderInput({ useLocal = false }: { useLocal?: boolean }) {
             const { value } = field;
             const schedule = parseText(value);
             const next = nextDate(schedule);
+            const crtx = crontext(value);
             return (
               <ErrorBoundary>
                 <FormItem>
@@ -118,19 +119,33 @@ export function ReminderInput({ useLocal = false }: { useLocal?: boolean }) {
                   </div>
                 </FormItem>
                 {value && (
-                  <div className="text-sm text-neutral-400 text-center mt-4">
-                    Next Occurrence:{" "}
-                    <span className="text-neutral-50" suppressHydrationWarning>
-                      {next.toLocaleDateString("en-us", {
-                        weekday: "long",
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "numeric",
-                      })}
-                    </span>
-                  </div>
+                  <>
+                    <div className="text-sm text-neutral-400 text-center mt-4">
+                      Next Occurrence:{" "}
+                      <span
+                        className="text-neutral-50"
+                        suppressHydrationWarning
+                      >
+                        {next.toLocaleDateString("en-us", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "numeric",
+                        })}
+                      </span>
+                    </div>
+                    <div className="text-sm text-neutral-400 text-center mt-4">
+                      Repeats:{" "}
+                      <span
+                        className="text-neutral-50"
+                        suppressHydrationWarning
+                      >
+                        {crtx.repeat ? "Yes" : "No"}
+                      </span>
+                    </div>
+                  </>
                 )}
                 <div className="float-right mt-4 h-24">
                   {field.value && (
