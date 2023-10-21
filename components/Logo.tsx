@@ -10,13 +10,13 @@ export function Logo() {
     <Link href="/home">
       <h1
         className={cn(
-          "text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r",
+          "text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r flex",
           Brand.gradient,
         )}
       >
         Remindble
         <Image
-          style={{ display: "inline", lineHeight: "32px" }}
+          className="pl-[6px]"
           width={30}
           height={30}
           priority

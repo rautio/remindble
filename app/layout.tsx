@@ -31,6 +31,7 @@ export default async function RootLayout({
         className={cn(inter.className, "dark")}
         style={{ colorScheme: "dark" }}
       >
+        <link rel="icon" href="/images/favicon.ico" sizes="any" />
         <body>
           <ThemeProvider>
             <APIProvider>
