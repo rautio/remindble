@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { parseText, nextDate } from "crontext";
+import { parseText, nextDate, crontext } from "crontext";
 import { Input } from "@/components/ui/input";
 import ErrorBoundary from "./ErrorBoundary";
 import { cn } from "@/lib/utils";
@@ -47,8 +47,8 @@ export function ReminderInput({ useLocal = false }: { useLocal?: boolean }) {
   const onSubmit = async (data: createTaskSchemaType) => {
     const schedule = parseText(data.content);
     const expires = nextDate(schedule);
-    const newData = { ...data, expiresAt: expires };
-    // TODO - does it repeat?
+    const { repeat } = crontext(data.content);
+    const newData = { ...data, expiresAt: expires, repeat };
     try {
       await create(newData);
       toast({

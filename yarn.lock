@@ -1459,10 +1459,10 @@ cookie@0.5.0, cookie@^0.5.0:
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.5.0.tgz#d1f5d71adec6558c58f389987c366aa47e994f8b"
   integrity sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==
 
-crontext@^0.2.8:
-  version "0.2.8"
-  resolved "https://registry.yarnpkg.com/crontext/-/crontext-0.2.8.tgz#a63b4c3fc2d2ec5f1077bec11522561d68fea150"
-  integrity sha512-qdM5UZPzMZEvKgAZmPRJ9/njQKpoSTB9V3+w4W4YSgm8NBqFduGm2l0BCwY0yocat1JawL+KBqScuyuK+qye5A==
+crontext@^0.2.10:
+  version "0.2.10"
+  resolved "https://registry.yarnpkg.com/crontext/-/crontext-0.2.10.tgz#2e4790ca0afcda939d1a16a37ba6be19edaf4872"
+  integrity sha512-LW84Jbm8PwT2SKwNuWtI9xtnH1V0o6JsKL2c3DfclUWjJ0v+XLrsxaVvMVBJmwk2rgD4D4BYRk6ET0n8EpfBxA==
 
 cross-spawn@^7.0.2:
   version "7.0.3"
