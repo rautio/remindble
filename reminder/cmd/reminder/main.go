@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/jackc/pgx/v5"
-	"github.com/robfig/cron/v3"
 )
 
 type Task struct {
@@ -18,6 +18,29 @@ type Task struct {
 	UserID    string `json:"userId"`
 	CreatedAt time.Time `json:"createdAt"`
 	Done      bool   `json:"done"`
+}
+
+type MyEvent struct {
+	Name string `json:"name"`
+}
+
+func HandleRequest(ctx context.Context, event *MyEvent) (*string, error) {
+	if event == nil {
+		return nil, fmt.Errorf("received nil event")
+	}
+	message := fmt.Sprintf("Hello %s!", event.Name)
+	// Setup logging
+	// logfile, err := os.Create("reminder.log")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// defer logfile.Close()
+	// log.SetOutput(logfile)
+
+	// // Start the reminder scheduler
+	// fmt.Println("Created reminder!")
+	// fetchReminders()
+	return &message, nil
 }
 
 func fetchReminders() {
@@ -46,30 +69,6 @@ func fetchReminders() {
 	}
 }
 
-func checkReminders() {
-	c := cron.New()
-
-	// Every minute check to see if any reminders need to be triggered
-	c.AddFunc("@every 1s", func() {
-		log.Println("Info running reminder")
-		fmt.Printf("Checking:\n")
-		fetchReminders()
-	})
-
-	c.Start()
-}
-
 func main() {
-	// Setup logging
-	logfile, err := os.Create("reminder.log")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer logfile.Close()
-	log.SetOutput(logfile)
-
-	// Start the reminder scheduler
-	fmt.Println("Created reminder!")
-	checkReminders()
-	fmt.Scanln()
+	lambda.Start(HandleRequest)
 }
