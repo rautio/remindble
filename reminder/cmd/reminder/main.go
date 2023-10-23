@@ -18,6 +18,8 @@ type Task struct {
 	UserID    string `json:"userId"`
 	CreatedAt time.Time `json:"createdAt"`
 	Done      bool   `json:"done"`
+	Schedule  string `json:"schedule"`
+	Repeat    bool   `json:"repeat"`
 }
 
 type MyEvent struct {

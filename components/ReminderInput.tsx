@@ -36,6 +36,18 @@ const getPlaceholder = (): string => {
   return placeholders[idx];
 };
 
+const getUTCDate = (date: Date): Date => {
+  var now_utc = Date.UTC(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds(),
+  );
+  return new Date(now_utc);
+};
+
 export function ReminderInput({ useLocal = false }: { useLocal?: boolean }) {
   const router = useRouter();
   const { create } = useTask();
@@ -48,7 +60,7 @@ export function ReminderInput({ useLocal = false }: { useLocal?: boolean }) {
     const schedule = parseText(data.content);
     const expires = nextDate(schedule);
     const { repeat } = crontext(data.content);
-    const newData = { ...data, expiresAt: expires, repeat };
+    const newData = { ...data, expiresAt: getUTCDate(expires), repeat };
     try {
       await create(newData);
       toast({
