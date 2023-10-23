@@ -29,21 +29,13 @@ func HandleRequest(ctx context.Context, event *MyEvent) (*string, error) {
 		return nil, fmt.Errorf("received nil event")
 	}
 	message := fmt.Sprintf("Hello %s!", event.Name)
-	// Setup logging
-	// logfile, err := os.Create("reminder.log")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// defer logfile.Close()
-	// log.SetOutput(logfile)
 
-	// // Start the reminder scheduler
-	// fmt.Println("Created reminder!")
-	// fetchReminders()
+	fetchReminders()
 	return &message, nil
 }
 
 func fetchReminders() {
+	log.Printf("Setting up DB connection")
 	// urlExample := "postgres://username:password@localhost:5432/database_name"
 	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
 	if err != nil {
@@ -59,6 +51,7 @@ func fetchReminders() {
 	}
 	defer rows.Close()
 	tasks, err := pgx.CollectRows(rows, pgx.RowToStructByName[Task])
+	log.Printf("Tasks: %v\n", len(tasks))
 	if err != nil {
 			fmt.Fprintf(os.Stderr, "Collecting rows result failed: %v\n", err)
 			log.Printf("Error collecting rows result: %v\n", err)
