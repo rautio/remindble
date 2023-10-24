@@ -8,6 +8,9 @@ import (
 	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/sns"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -37,6 +40,9 @@ func HandleRequest(ctx context.Context, event *MyEvent) (*string, error) {
 }
 
 func fetchReminders() {
+	// Connect to AWS
+	sess := session.Must(session.NewSession())
+	svc := sns.New(sess)
 	log.Printf("Setting up DB connection")
 	// urlExample := "postgres://username:password@localhost:5432/database_name"
 	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
@@ -61,6 +67,16 @@ func fetchReminders() {
 	// Iterate through the result set
 	for _, t := range tasks {
 		fmt.Printf("%s: %s\n", t.Content, t.ExpiresAt)
+		result, err := svc.Publish(&sns.PublishInput{
+			Message:  aws.String(t.Content),
+			TopicArn: aws.String("arn:aws:sns:us-east-1:554718202330:reminder-notifications"),
+		})
+		if err != nil {
+				fmt.Println(err.Error())
+				os.Exit(1)
+		}
+		// Print the message ID
+    fmt.Println(*result.MessageId)
 	}
 }
 
