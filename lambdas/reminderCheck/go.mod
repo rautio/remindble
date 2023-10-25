@@ -1,4 +1,4 @@
-module reminder
+module reminderCheck
 
 go 1.18
 

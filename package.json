@@ -10,7 +10,9 @@
     "postinstall": "prisma generate",
     "studio": "prisma studio",
     "migrate": "prisma migrate dev",
-    "build-lambda": "cd ./reminder/cmd/reminder && GOOS=linux GOARCH=arm64 go build -tags lambda.norpc -o bootstrap main.go && zip reminderCheck.zip bootstrap",
+    "build-reminder-check": "cd ./lambdas/reminderCheck && GOOS=linux GOARCH=arm64 go build -tags lambda.norpc -o bootstrap main.go && zip reminderCheck.zip bootstrap",
+    "build-reminder-send": "cd ./lambdas/reminderSend && GOOS=linux GOARCH=arm64 go build -tags lambda.norpc -o bootstrap main.go && zip reminderSend.zip bootstrap",
+    "build-lambda": "yarn build-reminder-check && yarn build-reminder-send",
     "create-lambda": "./scripts/create-lambda.sh",
     "update-lambda": "./scripts/update-lambda.sh"
   },
