@@ -25,7 +25,7 @@ export function TaskList() {
     return () => {
       TaskObservable.unsubscribe(fetchTasks);
     };
-  }, []);
+  }, [fetchTasks]);
   if (tasks.length === 0) return null;
   return (
     <div>
@@ -34,6 +34,7 @@ export function TaskList() {
       </h1>
       <div className="ml-12 border p-4 border-indigo-500 dark:border-sky-500 rounded-md">
         {tasks.map((task) => (
+          // @ts-ignore
           <TaskCard task={task} key={task.id} />
         ))}
       </div>

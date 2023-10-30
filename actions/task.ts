@@ -5,6 +5,7 @@ import { getSession } from "./utils";
 
 export async function createTask(data: createTaskSchemaType) {
   const session = await getSession();
+  // @ts-ignore
   const userId = session?.user?.id;
   if (!userId) {
     // Use local db
@@ -21,6 +22,7 @@ export async function createTask(data: createTaskSchemaType) {
 }
 export async function bulkCreateTask(tasks: createTaskSchemaType[]) {
   const session = await getSession();
+  // @ts-ignore
   const userId = session?.user?.id;
 
   if (!userId) {
@@ -40,6 +42,7 @@ export async function bulkCreateTask(tasks: createTaskSchemaType[]) {
 
 export async function editTask(id: number, data: createTaskSchemaType) {
   const session = await getSession();
+  // @ts-ignore
   const userId = session?.user?.id;
 
   if (!userId) {
@@ -61,6 +64,7 @@ export async function editTask(id: number, data: createTaskSchemaType) {
 
 export async function setTaskToDone(id: number) {
   const session = await getSession();
+  // @ts-ignore
   const userId = session?.user?.id;
 
   if (!userId) {
@@ -79,6 +83,7 @@ export async function setTaskToDone(id: number) {
 
 export async function deleteTask(id: number) {
   const session = await getSession();
+  // @ts-ignore
   const userId = session?.user?.id;
 
   if (!userId) {

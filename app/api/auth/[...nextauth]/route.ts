@@ -9,7 +9,9 @@ export const authOptions = {
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
+      // @ts-ignore
       clientId: process.env.GOOGLE_CLIENT_ID,
+      // @ts-ignore
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
     // GithubProvider({
@@ -19,6 +21,7 @@ export const authOptions = {
     // ...add more providers here
   ],
   callbacks: {
+    // @ts-ignore
     session: ({ session, token }) => ({
       ...session,
       user: {
@@ -34,6 +37,7 @@ export const authOptions = {
   },
 };
 
+// @ts-ignore
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

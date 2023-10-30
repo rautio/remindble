@@ -177,7 +177,7 @@ export function ReminderInput({ useLocal = false }: { useLocal?: boolean }) {
                         )}
                       </Button>
                       <span className="text-xs text-neutral-500 text-right">
-                        ...or just press the "Enter" key
+                        ...or just press the &quot;Enter&quot; key
                       </span>
                     </div>
                   )}

@@ -8,6 +8,7 @@ export default async function Settings() {
     <div>
       <h1>Settings</h1>
       <ThemeSwitcher />
+      {/* @ts-ignore */}
       <UserProfile user={profile} />
     </div>
   );

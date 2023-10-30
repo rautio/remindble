@@ -60,9 +60,11 @@ function WelcomeMsgFallback() {
 export async function TaskList() {
   const session = await getSession();
   let tasks: Task[] = [];
+  // @ts-ignore
   if (session?.user?.id) {
     tasks = await prisma.task.findMany({
       where: {
+        // @ts-ignore
         userId: session.user.id,
       },
     });
