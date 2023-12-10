@@ -1,6 +1,6 @@
 # Remindble
 
-A simple reminder app built using Next.js, TypeScript, Tailwind and Prisma.
+A reminder app built using Next.js, TypeScript, Tailwind and Prisma. Using AWS Lambda for managing and sending notifications when reminders expire. Using a Postgres DB.
 
 ## Getting Started
 
